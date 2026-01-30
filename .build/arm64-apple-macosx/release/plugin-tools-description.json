@@ -1,0 +1,835 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.OhMySkill-arm64-apple-macosx15.0-release.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/sources",
+      "importPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules/Yams.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "OhMySkill",
+      "moduleOutputPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules/OhMySkill.swiftmodule",
+      "objects" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-whole-module-optimization",
+        "-num-threads",
+        "8",
+        "-serialize-diagnostics",
+        "-O",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include",
+        "-module-cache-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "OhMySkill_main",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "oh_my_skill"
+      ],
+      "outputFileMapPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules/OhMySkill.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift"
+      ],
+      "tempsPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build",
+      "wholeModuleOptimization" : true
+    },
+    "C.Yams-arm64-apple-macosx15.0-release.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/sources",
+      "importPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/AliasDereferencingStrategy.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Anchor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Constructor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Decoder.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Emitter.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Encoder.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Mark.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Alias.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Mapping.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Scalar.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Sequence.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Parser.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/RedundancyAliasingStrategy.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Representer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Resolver.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/String+Yams.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Tag.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlAnchorProviding.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlError.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlTagProviding.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/api.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/emitter.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/parser.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/reader.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/scanner.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/writer.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "Yams",
+      "moduleOutputPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules/Yams.swiftmodule",
+      "objects" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/AliasDereferencingStrategy.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Anchor.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Constructor.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Decoder.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Emitter.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Encoder.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Mark.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Alias.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Mapping.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Scalar.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Sequence.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Parser.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/RedundancyAliasingStrategy.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Representer.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Resolver.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/String+Yams.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Tag.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlAnchorProviding.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlError.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlTagProviding.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-whole-module-optimization",
+        "-num-threads",
+        "8",
+        "-serialize-diagnostics",
+        "-O",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include/module.modulemap",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include",
+        "-module-cache-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/include/Yams-Swift.h",
+        "-swift-version",
+        "5",
+        "-Xcc",
+        "-DYAML_DECLARE_STATIC",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-suppress-warnings"
+      ],
+      "outputFileMapPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/AliasDereferencingStrategy.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Anchor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Constructor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Decoder.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Emitter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Encoder.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Mark.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Alias.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Mapping.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Scalar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Sequence.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Parser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/RedundancyAliasingStrategy.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Representer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Resolver.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/String+Yams.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Tag.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlAnchorProviding.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlTagProviding.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules/Yams.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/AliasDereferencingStrategy.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Anchor.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Constructor.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Decoder.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Emitter.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Encoder.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Mark.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Alias.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Mapping.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Scalar.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Sequence.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Parser.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/RedundancyAliasingStrategy.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Representer.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Resolver.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/String+Yams.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Tag.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlAnchorProviding.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlError.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlTagProviding.swift"
+      ],
+      "tempsPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build",
+      "wholeModuleOptimization" : true
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "OhMySkill" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "OhMySkill",
+      "-package-name",
+      "oh_my_skill",
+      "-c",
+      "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift",
+      "-I",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-whole-module-optimization",
+      "-num-threads",
+      "8",
+      "-serialize-diagnostics",
+      "-O",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include",
+      "-module-cache-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "OhMySkill_main",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "oh_my_skill",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ],
+    "Yams" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "Yams",
+      "-c",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/AliasDereferencingStrategy.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Anchor.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Constructor.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Decoder.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Emitter.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Encoder.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Mark.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Alias.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Mapping.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Scalar.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Sequence.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Parser.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/RedundancyAliasingStrategy.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Representer.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Resolver.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/String+Yams.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Tag.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlAnchorProviding.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlError.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlTagProviding.swift",
+      "-I",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-whole-module-optimization",
+      "-num-threads",
+      "8",
+      "-serialize-diagnostics",
+      "-O",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include/module.modulemap",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/CYaml/include",
+      "-module-cache-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/include/Yams-Swift.h",
+      "-swift-version",
+      "5",
+      "-Xcc",
+      "-DYAML_DECLARE_STATIC",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-suppress-warnings",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "CYaml" : [
+
+    ],
+    "OhMySkill" : [
+      "Yams",
+      "CYaml"
+    ],
+    "Yams" : [
+      "CYaml"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/sources"
+    },
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/api.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/emitter.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/parser.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/reader.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/scanner.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/CYaml.build/src/writer.c.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/AliasDereferencingStrategy.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Anchor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Constructor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Decoder.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Emitter.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Encoder.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Mark.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Alias.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Mapping.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Scalar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.Sequence.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Node.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Parser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/RedundancyAliasingStrategy.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Representer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Resolver.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/String+Yams.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/Tag.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlAnchorProviding.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/YamlTagProviding.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.product/Objects.LinkFileList"
+    },
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/AliasDereferencingStrategy.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Anchor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Constructor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Decoder.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Emitter.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Encoder.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Mark.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Alias.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Mapping.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Scalar.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.Sequence.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Node.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Parser.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/RedundancyAliasingStrategy.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Representer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Resolver.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/String+Yams.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/Tag.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlAnchorProviding.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlError.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/Yams/Sources/Yams/YamlTagProviding.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/sources"
+    },
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
+    }
+  }
+}

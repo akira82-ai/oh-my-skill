@@ -1,0 +1,3 @@
+module Yams {
+    header "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/Yams.build/include/Yams-Swift.h"
+}

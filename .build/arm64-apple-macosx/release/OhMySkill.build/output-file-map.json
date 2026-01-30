@@ -1,0 +1,13 @@
+{
+  "": {
+    "dependencies": "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/OhMySkill.d",
+    "object": "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/OhMySkill.o",
+    "swift-dependencies": "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/master.swiftdeps"
+  },
+  "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift": {
+    "object": "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/main.swift.o",
+    "swiftmodule": "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/main.swiftdeps",
+    "diagnostics": "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/release/OhMySkill.build/main.dia"
+  }
+}

@@ -121,20 +121,26 @@ class SkillScanner {
 class ClaudeCLI: ObservableObject {
     @Published var messages: [Message] = []
     @Published var isProcessing = false
-    @Published var pendingQuestions: [String: String] = [:]  // 存储待回答的问题 {header: question}
-    @Published var inputPlaceholder: String = ""  // 预填充的输入框文本
+    @Published var pendingQuestions: [String: String] = [:]
+    @Published var inputPlaceholder: String = ""
 
-    private var sessionID = UUID().uuidString
     private let workDirectory: URL
     private var currentProcess: Process?
     private var outputBuffer = ""
-    private var processedMessageIds = Set<String>()  // 跟踪已处理的 message id
+    private var processedMessageIds = Set<String>()
+    private var isFirstMessage = true  // 跟踪是否是第一条消息
 
     init(workDirectory: URL) {
         self.workDirectory = workDirectory
     }
 
     func send(_ text: String, skill: Skill?) {
+        // 等待之前的进程结束
+        if let prevProcess = currentProcess, prevProcess.isRunning {
+            prevProcess.terminate()
+            currentProcess = nil
+        }
+
         // 清空已处理的消息 id，准备接收新的响应
         processedMessageIds.removeAll()
 
@@ -187,17 +193,29 @@ class ClaudeCLI: ObservableObject {
             DispatchQueue.main.async {
                 self.isProcessing = false
                 self.currentProcess = nil
+                // 标记第一条消息已发送，后续消息使用 -c 模式
+                self.isFirstMessage = false
             }
         }
     }
 
     private func buildArguments(skill: Skill?) -> [String] {
-        return [
-            "-p",
-            "--output-format", "stream-json",
-            "--verbose",
-            "--session-id", sessionID
-        ]
+        if isFirstMessage {
+            // 第一条消息：创建新会话
+            return [
+                "-p",
+                "--output-format", "stream-json",
+                "--verbose"
+            ]
+        } else {
+            // 后续消息：继续之前的会话
+            return [
+                "-c",
+                "-p",
+                "--output-format", "stream-json",
+                "--verbose"
+            ]
+        }
     }
 
     private func formatInput(_ text: String, skill: Skill?) -> String {

@@ -558,26 +558,21 @@ struct SimpleSkillRowView: View {
     let isSelected: Bool
 
     var body: some View {
-        HStack(spacing: 8) {
-            ZStack {
-                Circle()
-                    .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.3))
-                    .frame(width: 18, height: 18)
-
-                Text("\(index)")
-                    .font(.system(size: 10, weight: isSelected ? .bold : .regular))
-                    .foregroundColor(isSelected ? .white : .secondary)
-            }
+        HStack(spacing: 10) {
+            Text("\(index)")
+                .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                .foregroundColor(isSelected ? .primary : .secondary)
+                .frame(width: 20, alignment: .leading)
 
             Text(skill.name)
-                .font(.system(size: 12, weight: isSelected ? .semibold : .medium))
+                .font(.system(size: 13, weight: isSelected ? .medium : .regular))
                 .foregroundColor(isSelected ? .primary : .secondary)
 
             Spacer()
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 5)
-        .background(isSelected ? Color.accentColor.opacity(0.12) : Color.clear)
+        .padding(.vertical, 6)
+        .background(isSelected ? Color.accentColor.opacity(0.1) : Color.clear)
         .contentShape(Rectangle())
     }
 }
@@ -597,7 +592,7 @@ struct SkillPickerView: View {
                     .onTapGesture {
                         vm.selectSkill(skill)
                     }
-                    .id("skill-\(index)")  // 用于滚动定位
+                    .id("skill-\(index)")
                 }
             }
             .scrollPosition(id: Binding(
@@ -605,14 +600,9 @@ struct SkillPickerView: View {
                 set: { _ in }
             ))
         }
-        .frame(height: min(150, CGFloat(vm.filteredSkills.count * 28)))  // 动态高度，最大 150px
-        .background(Color(nsColor: .windowBackgroundColor))
-        .cornerRadius(6)
-        .shadow(radius: 4)
-        .overlay(
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-        )
+        .frame(height: min(150, CGFloat(vm.filteredSkills.count * 28)))
+        .background(Color(nsColor: .controlBackgroundColor).opacity(0.8))
+        .cornerRadius(8)
     }
 }
 
@@ -678,9 +668,7 @@ struct MainView: View {
                     }
                 }
 
-                Divider()
-
-                VStack(spacing: 4) {
+                VStack(spacing: 0) {
                     // 技能列表在上方
                     if vm.showSkillPicker && !vm.filteredSkills.isEmpty {
                         SkillPickerView(vm: vm)
@@ -694,8 +682,8 @@ struct MainView: View {
                             .frame(height: 80)
                             .font(.body)
                             .scrollContentBackground(.hidden)
-                            .background(Color.clear)
-                            .border(Color.black, width: 1)
+                            .background(Color(nsColor: .textBackgroundColor).opacity(0.5))
+                            .cornerRadius(8)
                             .onChange(of: vm.inputText) { oldValue, newValue in
                                 if newValue.hasPrefix("/") && !oldValue.hasPrefix("/") {
                                     vm.showSkillPicker = true
@@ -725,8 +713,9 @@ struct MainView: View {
                             .disabled(vm.inputText.isEmpty)
                         }
                     }
-                    .padding(8)
-                    .background(Color(nsColor: .textBackgroundColor))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color(nsColor: .windowBackgroundColor))
                 }
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: vm.showSkillPicker)
             }
@@ -750,7 +739,7 @@ struct MessageView: View {
     let message: ChatMessage
 
     var body: some View {
-        HStack(alignment: .top, spacing: 8) {
+        HStack(alignment: .top, spacing: 12) {
             Image(systemName: message.role == "user" ? "person.circle" : "brain")
                 .font(.title3)
                 .foregroundColor(message.role == "user" ? .blue : .purple)
@@ -768,9 +757,7 @@ struct MessageView: View {
             Spacer()
         }
         .padding(.horizontal)
-        .padding(.vertical, 8)
-        .background(Color(nsColor: .controlBackgroundColor))
-        .cornerRadius(8)
+        .padding(.vertical, 6)
     }
 }
 

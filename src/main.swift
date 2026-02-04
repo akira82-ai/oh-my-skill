@@ -645,6 +645,15 @@ struct SkillRowView: View {
 struct MainView: View {
     @StateObject var vm: AppViewModel
     @FocusState private var isInputFocused: Bool
+    @State private var monitor: Any?
+
+    private func scrollToBottom(proxy: ScrollViewProxy) {
+        if let lastMessage = vm.messages.last {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+            }
+        }
+    }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -660,11 +669,10 @@ struct MainView: View {
                         .padding()
                     }
                     .onChange(of: vm.messages.count) { _, _ in
-                        if let lastMessage = vm.messages.last {
-                            withAnimation {
-                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                            }
-                        }
+                        scrollToBottom(proxy: proxy)
+                    }
+                    .onChange(of: vm.messages.last?.content) { _, _ in
+                        scrollToBottom(proxy: proxy)
                     }
                 }
 
@@ -731,6 +739,22 @@ struct MainView: View {
         }
         .onAppear {
             isInputFocused = true
+            // 监听 Command+Enter 全局快捷键
+            monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                if event.keyCode == 36 && event.modifierFlags.contains(.command) {
+                    // 36 是 Enter/Return 键的 keyCode
+                    if !vm.inputText.isEmpty && !vm.showSkillPicker {
+                        vm.sendMessage()
+                        return nil // 消费事件
+                    }
+                }
+                return event
+            }
+        }
+        .onDisappear {
+            if let monitor = monitor {
+                NSEvent.removeMonitor(monitor)
+            }
         }
     }
 }

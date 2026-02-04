@@ -6,21 +6,21 @@
     <string>OhMySkill</string>
     <key>CFBundleIdentifier</key>
     <string>com.ohmyskill.app</string>
-    <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
     <key>CFBundleName</key>
     <string>OhMySkill</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.0.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>
-    <string>13.0</string>
-    <key>NSPrincipalClass</key>
-    <string>NSApplication</string>
-    <key>NSHighResolutionCapable</key>
+    <string>14.0</string>
+    <key>LSUIElement</key>
     <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>需要使用 Apple Events 来控制 Claude CLI</string>
+    <key>NSSystemAdministrationUsageDescription</key>
+    <string>需要管理员权限来执行某些操作</string>
 </dict>
 </plist>

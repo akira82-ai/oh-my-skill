@@ -1,14 +1,15 @@
 {
+  "originHash" : "2d4860bad0409f6f793aedcac82db21d8c21ab92002cfe9c0f83c4fa86424d94",
   "pins" : [
     {
-      "identity" : "yams",
+      "identity" : "hotkey",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/Yams",
+      "location" : "https://github.com/soffes/HotKey.git",
       "state" : {
-        "revision" : "3d6871d5b4a5cd519adf233fbb576e0a2af71c17",
-        "version" : "5.4.0"
+        "revision" : "a3cf605d7a96f6ff50e04fcb6dea6e2613cfcbe4",
+        "version" : "0.2.1"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

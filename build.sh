@@ -1,66 +1,75 @@
 #!/bin/bash
 
-# Oh My Skill - 构建脚本
+# Oh My Skill 构建脚本
+# 用于将 Swift 项目打包为 macOS .app bundle
 
 set -e
 
+# 配置
 APP_NAME="OhMySkill"
+BUNDLE_ID="com.ohmyskill.app"
 BUILD_DIR="build"
 APP_BUNDLE="$BUILD_DIR/$APP_NAME.app"
-CONTENTS="$APP_BUNDLE/Contents"
-MACOS="$CONTENTS/MacOS"
-RESOURCES="$CONTENTS/Resources"
+CONTENTS_DIR="$APP_BUNDLE/Contents"
+MACOS_DIR="$CONTENTS_DIR/MacOS"
+RESOURCES_DIR="$CONTENTS_DIR/Resources"
 
-echo "🔨 构建 $APP_NAME..."
-
-# 解析依赖
-echo "📦 解析依赖..."
-swift package resolve
-
-# 构建
-echo "🔧 编译..."
-swift build -c release
+echo "🔨 开始构建 $APP_NAME..."
 
 # 清理旧构建
-rm -rf "$APP_BUNDLE"
+rm -rf "$BUILD_DIR"
 
-# 创建 app bundle 结构
-mkdir -p "$MACOS"
-mkdir -p "$RESOURCES"
+# 创建目录结构
+mkdir -p "$MACOS_DIR"
+mkdir -p "$RESOURCES_DIR"
 
-# 复制 Info.plist
-cat > "$CONTENTS/Info.plist" << 'EOF'
+# 构建可执行文件
+echo "📦 编译 Swift 代码..."
+swift build -c release --product OhMySkill
+
+# 复制可执行文件
+echo "📋 复制可执行文件..."
+cp .build/release/OhMySkill "$MACOS_DIR/$APP_NAME"
+
+# 创建 Info.plist
+echo "📝 创建 Info.plist..."
+cat > "$CONTENTS_DIR/Info.plist" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>OhMySkill</string>
+    <string>$APP_NAME</string>
     <key>CFBundleIdentifier</key>
-    <string>com.ohmyskill.app</string>
-    <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
+    <string>$BUNDLE_ID</string>
     <key>CFBundleName</key>
-    <string>OhMySkill</string>
+    <string>$APP_NAME</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.0.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>
-    <string>13.0</string>
-    <key>NSPrincipalClass</key>
-    <string>NSApplication</string>
-    <key>NSHighResolutionCapable</key>
+    <string>14.0</string>
+    <key>LSUIElement</key>
     <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>需要使用 Apple Events 来控制 Claude CLI</string>
+    <key>NSSystemAdministrationUsageDescription</key>
+    <string>需要管理员权限来执行某些操作</string>
 </dict>
 </plist>
 EOF
 
-# 复制可执行文件
-cp ".build/release/$APP_NAME" "$MACOS/"
+# 可选：代码签名
+if [ -n "$CODE_SIGN_IDENTITY" ]; then
+    echo "✍️  代码签名..."
+    codesign --force --deep --sign "$CODE_SIGN_IDENTITY" "$APP_BUNDLE"
+fi
 
-echo "✅ 构建成功: $APP_BUNDLE"
+echo "✅ 构建完成！"
+echo "📂 应用位置: $APP_BUNDLE"
 echo ""
-echo "🚀 运行: open $APP_BUNDLE"
+echo "运行应用:"
+echo "  open $APP_BUNDLE"

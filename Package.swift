@@ -1,16 +1,18 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.10
 import PackageDescription
 
 let package = Package(
     name: "OhMySkill",
-    platforms: [.macOS(.v13)],
+    platforms: [
+        .macOS(.v14)
+    ],
     dependencies: [
-        .package(url: "https://github.com/jpsim/Yams", from: "5.0.0")
+        .package(url: "https://github.com/soffes/HotKey.git", from: "0.2.0")
     ],
     targets: [
         .executableTarget(
             name: "OhMySkill",
-            dependencies: ["Yams"],
+            dependencies: ["HotKey"],
             path: "src"
         )
     ]

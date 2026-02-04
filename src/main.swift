@@ -1,635 +1,846 @@
 import SwiftUI
-import Yams
+import AppKit
+import HotKey
 
 // MARK: - Models
 
-struct Skill: Identifiable, Hashable {
-    let id: String
-    let name: String
-    let description: String
-}
+struct HotKeySetting: Codable {
+    var key: String
+    var modifiers: [String]
 
-class Message: Identifiable {
-    let id = UUID()
-    let role: MessageRole
-    var content: String
-    let timestamp = Date()
+    static let `default` = HotKeySetting(key: "space", modifiers: ["option"])
 
-    init(role: MessageRole, content: String) {
-        self.role = role
-        self.content = content
+    var description: String {
+        let modSymbols = modifiers.map { $0.uppercased() }.joined(separator: "+")
+        return "\(modSymbols)+\(key.uppercased())"
     }
 }
 
-enum MessageRole {
-    case user
-    case assistant
+struct Skill: Identifiable, Codable {
+    let id: UUID
+    let name: String
+    let description: String
+    let directory: String
+
+    var displayName: String {
+        name.replacingOccurrences(of: "-", with: " ").capitalized
+    }
 }
 
 // MARK: - Services
 
 class SkillScanner {
-    private let skillsDirectory: URL
+    private let skillsURL: URL
 
     init() {
-        let homeDir = FileManager.default.homeDirectoryForCurrentUser
-        skillsDirectory = homeDir.appendingPathComponent(".claude/skills")
+        let homeURL = FileManager.default.homeDirectoryForCurrentUser
+        self.skillsURL = homeURL.appendingPathComponent(".claude/skills")
     }
 
-    func scan() -> [Skill] {
-        guard FileManager.default.fileExists(atPath: skillsDirectory.path) else {
-            return []
+    func scanSkills() -> [Skill] {
+        var skills: [Skill] = []
+
+        // 首先列出所有子目录
+        guard let subdirectories = try? FileManager.default.contentsOfDirectory(
+            at: skillsURL,
+            includingPropertiesForKeys: [.isDirectoryKey],
+            options: [.skipsHiddenFiles]
+        ) else {
+            NSLog("[SkillScanner] 无法访问 skills 目录: \(skillsURL.path)")
+            return skills
         }
 
-        do {
-            let subdirectories = try FileManager.default.contentsOfDirectory(
-                at: skillsDirectory,
-                includingPropertiesForKeys: [.isDirectoryKey],
-                options: [.skipsHiddenFiles]
-            )
+        for subdirectory in subdirectories {
+            guard subdirectory.hasDirectoryPath else { continue }
 
-            var skills: [Skill] = []
-            for subdir in subdirectories {
-                var isDirectory: ObjCBool = false
-                guard FileManager.default.fileExists(atPath: subdir.path, isDirectory: &isDirectory),
-                      isDirectory.boolValue else {
-                    continue
-                }
+            let skillFile = subdirectory.appendingPathComponent("skill.md")
+            guard FileManager.default.fileExists(atPath: skillFile.path) else { continue }
 
-                let skillFile = subdir.appendingPathComponent("SKILL.md")
-                guard FileManager.default.fileExists(atPath: skillFile.path) else {
-                    continue
-                }
-
-                if let skill = parseSkill(from: skillFile) {
-                    skills.append(skill)
-                }
-            }
-
-            return skills.sorted { $0.name < $1.name }
-        } catch {
-            return []
-        }
-    }
-
-    private func parseSkill(from file: URL) -> Skill? {
-        guard let content = try? String(contentsOf: file, encoding: .utf8) else {
-            return nil
-        }
-
-        guard let frontmatter = parseFrontmatter(from: content) else {
-            return nil
-        }
-
-        let name = frontmatter["name"] ?? file.deletingLastPathComponent().lastPathComponent
-        let description = frontmatter["description"] ?? "No description"
-
-        return Skill(id: name, name: name, description: description)
-    }
-
-    private func parseFrontmatter(from content: String) -> [String: String]? {
-        let pattern = "^---\\n([\\s\\S]*?)\\n---"
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: .anchorsMatchLines) else {
-            return nil
-        }
-
-        let range = NSRange(content.startIndex..., in: content)
-        guard let match = regex.firstMatch(in: content, options: [], range: range),
-              let frontmatterRange = Range(match.range(at: 1), in: content) else {
-            return nil
-        }
-
-        let frontmatter = String(content[frontmatterRange])
-
-        guard let yaml = try? Yams.compose(yaml: frontmatter),
-              let mapping = yaml.mapping else {
-            return nil
-        }
-
-        var result: [String: String] = [:]
-        for (keyNode, valueNode) in mapping {
-            if let keyName = keyNode.string,
-               let keyValue = valueNode.string {
-                result[keyName] = keyValue
+            let directoryName = subdirectory.lastPathComponent
+            if let skill = parseSkillFile(at: skillFile, directory: directoryName) {
+                NSLog("[SkillScanner] 解析成功: \(skill.name)")
+                skills.append(skill)
+            } else {
+                NSLog("[SkillScanner] 解析失败: \(skillFile.path)")
             }
         }
 
-        return result
+        NSLog("[SkillScanner] 共找到 \(skills.count) 个技能")
+        return skills.sorted { $0.name < $1.name }
+    }
+
+    private func parseSkillFile(at url: URL, directory: String) -> Skill? {
+        guard let content = try? String(contentsOf: url) else {
+            NSLog("[SkillScanner] 无法读取文件: \(url.path)")
+            return nil
+        }
+
+        // 查找 front matter 的开始和结束
+        let lines = content.components(separatedBy: .newlines)
+        guard lines.first == "---" else {
+            NSLog("[SkillScanner] 文件格式错误（缺少开始 ---）: \(url.path)")
+            return nil
+        }
+
+        var name = ""
+        var description = ""
+
+        // 解析 front matter 行
+        for line in lines.dropFirst() {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if trimmed == "---" { break } // 遇到结束标记
+
+            if trimmed.hasPrefix("name:") {
+                if let colonIndex = trimmed.firstIndex(of: ":") {
+                    let valueStart = trimmed.index(after: colonIndex)
+                    name = String(trimmed[valueStart...]).trimmingCharacters(in: .whitespaces)
+                }
+            } else if trimmed.hasPrefix("description:") {
+                if let colonIndex = trimmed.firstIndex(of: ":") {
+                    let valueStart = trimmed.index(after: colonIndex)
+                    description = String(trimmed[valueStart...]).trimmingCharacters(in: .whitespaces)
+                }
+            }
+        }
+
+        guard !name.isEmpty else {
+            NSLog("[SkillScanner] 未找到 name 字段: \(url.path)")
+            return nil
+        }
+
+        NSLog("[SkillScanner] 解析成功: \(name) - \(description)")
+        return Skill(id: UUID(), name: name, description: description.isEmpty ? "无描述" : description, directory: directory)
     }
 }
 
-class ClaudeCLI: ObservableObject {
-    @Published var messages: [Message] = []
-    @Published var isProcessing = false
-    @Published var pendingQuestions: [String: String] = [:]
-    @Published var inputPlaceholder: String = ""
+class HotKeyManager: ObservableObject {
+    @Published var setting: HotKeySetting {
+        didSet {
+            saveSetting()
+            updateHotKey()
+        }
+    }
 
-    private let workDirectory: URL
-    private var currentProcess: Process?
-    private var outputBuffer = ""
-    private var processedMessageIds = Set<String>()
-    private var isFirstMessage = true  // 跟踪是否是第一条消息
+    private var hotKey: HotKey?
+    private let onKeyDown: () -> Void
+
+    init(onKeyDown: @escaping () -> Void) {
+        self.onKeyDown = onKeyDown
+        self.setting = Self.loadSetting()
+        setupHotKey()
+    }
+
+    private static func loadSetting() -> HotKeySetting {
+        guard let data = UserDefaults.standard.data(forKey: "hotKeySetting"),
+              let setting = try? JSONDecoder().decode(HotKeySetting.self, from: data) else {
+            return .default
+        }
+        return setting
+    }
+
+    private func saveSetting() {
+        if let data = try? JSONEncoder().encode(setting) {
+            UserDefaults.standard.set(data, forKey: "hotKeySetting")
+        }
+    }
+
+    private func setupHotKey() {
+        updateHotKey()
+    }
+
+    private func updateHotKey() {
+        hotKey = nil
+
+        guard let key = parseKey(setting.key),
+              let modifiers = parseModifiers(setting.modifiers) else {
+            return
+        }
+
+        hotKey = HotKey(key: key, modifiers: modifiers)
+        hotKey?.keyDownHandler = onKeyDown
+    }
+
+    private func parseKey(_ string: String) -> Key? {
+        switch string.lowercased() {
+        case "space": return .space
+        case "return", "enter": return .return
+        case "tab": return .tab
+        case "escape", "esc": return .escape
+        case "a": return .a
+        case "b": return .b
+        case "c": return .c
+        case "d": return .d
+        case "e": return .e
+        case "f": return .f
+        case "g": return .g
+        case "h": return .h
+        case "i": return .i
+        case "j": return .j
+        case "k": return .k
+        case "l": return .l
+        case "m": return .m
+        case "n": return .n
+        case "o": return .o
+        case "p": return .p
+        case "q": return .q
+        case "r": return .r
+        case "s": return .s
+        case "t": return .t
+        case "u": return .u
+        case "v": return .v
+        case "w": return .w
+        case "x": return .x
+        case "y": return .y
+        case "z": return .z
+        case "0": return .zero
+        case "1": return .one
+        case "2": return .two
+        case "3": return .three
+        case "4": return .four
+        case "5": return .five
+        case "6": return .six
+        case "7": return .seven
+        case "8": return .eight
+        case "9": return .nine
+        default:
+            return Key(string: string)
+        }
+    }
+
+    private func parseModifiers(_ array: [String]) -> NSEvent.ModifierFlags? {
+        var flags: NSEvent.ModifierFlags = []
+        for mod in array {
+            switch mod.lowercased() {
+            case "command", "cmd": flags.insert(.command)
+            case "option", "opt", "alt": flags.insert(.option)
+            case "control", "ctrl": flags.insert(.control)
+            case "shift": flags.insert(.shift)
+            default: break
+            }
+        }
+        return flags.isEmpty ? nil : flags
+    }
+}
+
+// MARK: - ViewModels
+
+class AppViewModel: ObservableObject {
+    let workDirectory: URL
+    @Published var messages: [ChatMessage] = []
+    @Published var inputText = ""
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    @Published var showSkillPicker = false
+    @Published var availableSkills: [Skill] = []
+
+    private let claudeCLI: ClaudeCLI
+    private let skillScanner = SkillScanner()
 
     init(workDirectory: URL) {
         self.workDirectory = workDirectory
+        self.claudeCLI = ClaudeCLI(workDirectory: workDirectory)
+        loadSkills()
     }
 
-    func send(_ text: String, skill: Skill?) {
-        // 等待之前的进程结束
-        if let prevProcess = currentProcess, prevProcess.isRunning {
-            prevProcess.terminate()
-            currentProcess = nil
+    private func loadSkills() {
+        availableSkills = skillScanner.scanSkills()
+    }
+
+    var filteredSkills: [Skill] {
+        if inputText.isEmpty || !inputText.hasPrefix("/") {
+            return []
         }
 
-        // 清空已处理的消息 id，准备接收新的响应
-        processedMessageIds.removeAll()
-
-        let userMessage = Message(role: .user, content: text)
-        DispatchQueue.main.async {
-            self.messages.append(userMessage)
-            self.isProcessing = true
+        let query = String(inputText.dropFirst()).lowercased()
+        if query.isEmpty {
+            return availableSkills
         }
 
-        let arguments = buildArguments(skill: skill)
-        guard let process = createProcess(arguments: arguments) else {
-            DispatchQueue.main.async {
-                self.isProcessing = false
-            }
-            return
-        }
-
-        currentProcess = process
-
-        let inputPipe = Pipe()
-        let outputPipe = Pipe()
-        process.standardInput = inputPipe
-        process.standardOutput = outputPipe
-        process.standardError = outputPipe
-
-        outputPipe.fileHandleForReading.readabilityHandler = { [weak self] handle in
-            guard let self = self else { return }
-            let data = handle.availableData
-            if !data.isEmpty {
-                self.processOutput(data: data)
-            }
-        }
-
-        do {
-            try process.run()
-        } catch {
-            DispatchQueue.main.async {
-                self.isProcessing = false
-            }
-            return
-        }
-
-        if let inputData = formatInput(text, skill: skill).data(using: .utf8) {
-            inputPipe.fileHandleForWriting.write(inputData)
-            inputPipe.fileHandleForWriting.closeFile()
-        }
-
-        DispatchQueue.global(qos: .userInitiated).async {
-            process.waitUntilExit()
-            DispatchQueue.main.async {
-                self.isProcessing = false
-                self.currentProcess = nil
-                // 标记第一条消息已发送，后续消息使用 -c 模式
-                self.isFirstMessage = false
-            }
+        return availableSkills.filter { skill in
+            skill.name.lowercased().contains(query) ||
+            skill.description.lowercased().contains(query)
         }
     }
 
-    private func buildArguments(skill: Skill?) -> [String] {
-        if isFirstMessage {
-            // 第一条消息：创建新会话
-            return [
-                "-p",
-                "--output-format", "stream-json",
-                "--verbose"
-            ]
-        } else {
-            // 后续消息：继续之前的会话
-            return [
-                "-c",
-                "-p",
-                "--output-format", "stream-json",
-                "--verbose"
-            ]
-        }
+    func selectSkill(_ skill: Skill) {
+        inputText = "/\(skill.name) "
+        showSkillPicker = false
     }
 
-    private func formatInput(_ text: String, skill: Skill?) -> String {
-        if let skill = skill {
-            return "/\(skill.name) \(text)"
-        }
-        return text
-    }
+    func handleKeyPress(_ key: String) -> Bool {
+        guard showSkillPicker, !filteredSkills.isEmpty else { return false }
 
-    private func createProcess(arguments: [String]) -> Process? {
-        let possiblePaths = [
-            "/opt/homebrew/bin/claude",
-            "/usr/local/bin/claude",
-            "~/.local/bin/claude"
-        ]
-
-        var executableURL: URL?
-        for path in possiblePaths {
-            let expandedPath = NSString(string: path).expandingTildeInPath
-            let url = URL(fileURLWithPath: expandedPath)
-            if FileManager.default.fileExists(atPath: url.path) {
-                executableURL = url
-                break
+        switch key {
+        case "escape":
+            showSkillPicker = false
+            return true
+        case "0":
+            if filteredSkills.count >= 10 {
+                selectSkill(filteredSkills[9])
+                return true
             }
-        }
-
-        guard let executableURL = executableURL else {
-            return nil
-        }
-
-        let process = Process()
-        process.executableURL = executableURL
-        process.arguments = arguments
-        process.currentDirectoryURL = workDirectory
-
-        return process
-    }
-
-    private func processOutput(data: Data) {
-        guard let text = String(data: data, encoding: .utf8) else { return }
-
-        outputBuffer += text
-
-        let lines = outputBuffer.components(separatedBy: "\n")
-        outputBuffer = lines.last ?? ""
-
-        for line in lines.dropLast() {
-            parseAndHandleLine(line)
-        }
-    }
-
-    private func parseAndHandleLine(_ line: String) {
-        guard let data = line.data(using: .utf8),
-              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let type = json["type"] as? String else {
-            return
-        }
-
-        // 调试：打印所有收到的 JSON 类型
-        if type != "system" {
-            print("📥 收到: \(type)")
-        }
-
-        switch type {
-        case "assistant":
-            // 解析 assistant 消息: {"type":"assistant","message":{"content":[...]}}
-            if let message = json["message"] as? [String: Any],
-               let messageId = message["id"] as? String {
-
-                // 检查是否已经处理过这条消息
-                if processedMessageIds.contains(messageId) {
-                    return  // 跳过已处理的消息
-                }
-                processedMessageIds.insert(messageId)
-
-                guard let content = message["content"] as? [[String: Any]] else {
-                    return
-                }
-
-                // 检查是否有 AskUserQuestion
-                var hasAskUserQuestion = false
-
-                for item in content {
-                    if let itemType = item["type"] as? String,
-                       itemType == "tool_use",
-                       let name = item["name"] as? String,
-                       name == "AskUserQuestion",
-                       let input = item["input"] as? [String: Any] {
-                        hasAskUserQuestion = true
-                        handleToolUse(name: name, input: input)
-                        break  // 只处理第一个 AskUserQuestion
-                    }
-                }
-
-                // 如果没有 AskUserQuestion，才显示普通文本
-                if !hasAskUserQuestion {
-                    for item in content {
-                        if let itemType = item["type"] as? String,
-                           itemType == "text",
-                           let text = item["text"] as? String,
-                           !text.isEmpty {  // 跳过空文本
-                            appendAssistantMessage(text)
-                        }
-                    }
-                }
+        case "1", "2", "3", "4", "5", "6", "7", "8", "9":
+            let index = Int(key)! - 1
+            if index < filteredSkills.count {
+                selectSkill(filteredSkills[index])
+                return true
             }
-
-        case "result":
-            // 解析最终结果: {"type":"result","result":"..."}
-            if let result = json["result"] as? String {
-                appendNewAssistantMessage(result)
-            }
-
-        case "content_delta":
-            // 流式内容增量
-            if let delta = json["delta"] as? [String: Any],
-               let text = delta["text"] as? String {
-                appendAssistantMessage(text)
-            }
-
-        case "error":
-            if let error = json["error"] as? String {
-                print("Claude error: \(error)")
-            }
-
         default:
             break
         }
+
+        return false
     }
 
-    private func handleToolUse(name: String, input: [String: Any]) {
-        print("🔧 工具调用: \(name)")
+    func sendMessage() {
+        guard !inputText.isEmpty else { return }
 
-        if name == "AskUserQuestion" {
-            // AskUserQuestion 在 CLI 模式下无法得到有效响应
-            // AI 会自动降级为纯文本对话
-            // 我们需要清空待回答问题，等待下一个文本响应
-            DispatchQueue.main.async {
-                self.pendingQuestions = [:]
-                self.inputPlaceholder = ""
+        let userMessage = ChatMessage(role: "user", content: inputText)
+        messages.append(userMessage)
+
+        let prompt = inputText
+        inputText = ""
+        isLoading = true
+        errorMessage = nil
+
+        Task {
+            do {
+                let response = try await claudeCLI.sendPrompt(prompt, continueConversation: !messages.isEmpty)
+                await MainActor.run {
+                    messages.append(ChatMessage(role: "assistant", content: response))
+                    isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                    isLoading = false
+                }
             }
-        }
-    }
-
-    private func appendAssistantMessage(_ content: String) {
-        DispatchQueue.main.async {
-            if let lastMessage = self.messages.last,
-               lastMessage.role == .assistant {
-                lastMessage.content += content
-            } else {
-                let assistantMessage = Message(role: .assistant, content: content)
-                self.messages.append(assistantMessage)
-            }
-        }
-    }
-
-    private func appendNewAssistantMessage(_ content: String) {
-        DispatchQueue.main.async {
-            let assistantMessage = Message(role: .assistant, content: content)
-            self.messages.append(assistantMessage)
         }
     }
 }
 
-class AppViewModel: ObservableObject {
-    @Published var skills: [Skill] = []
-    @Published var selectedSkill: Skill?
-    @Published var claude: ClaudeCLI
-    @Published var workDirectory: URL
+struct ChatMessage: Identifiable {
+    let id = UUID()
+    let role: String
+    let content: String
+}
+
+class ClaudeCLI {
+    private let workDirectory: URL
+    private var process: Process?
+    private let claudePath: String
 
     init(workDirectory: URL) {
         self.workDirectory = workDirectory
-        self.claude = ClaudeCLI(workDirectory: workDirectory)
-        self.skills = SkillScanner().scan()
+        self.claudePath = Self.findClaudePath()
+    }
+
+    private static func findClaudePath() -> String {
+        let possiblePaths = [
+            "/opt/homebrew/bin/claude",
+            "/usr/local/bin/claude",
+            "/opt/homebrew/bin/claude-cli"
+        ]
+
+        // 尝试常见路径
+        for path in possiblePaths {
+            if FileManager.default.fileExists(atPath: path) {
+                NSLog("[ClaudeCLI] 找到 claude: \(path)")
+                return path
+            }
+        }
+
+        NSLog("[ClaudeCLI] 使用默认路径")
+        return "/opt/homebrew/bin/claude"
+    }
+
+    func sendPrompt(_ prompt: String, continueConversation: Bool) async throws -> String {
+        return try await withCheckedThrowingContinuation { continuation in
+            var arguments = [String]()
+
+            if continueConversation {
+                arguments.append("-c")
+            }
+
+            arguments.append("-p")
+            arguments.append(prompt)
+
+            NSLog("[ClaudeCLI] 执行: \(claudePath) \(arguments.joined(separator: " "))")
+
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: claudePath)
+            process.arguments = arguments
+            process.currentDirectoryURL = workDirectory
+
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.standardError = pipe
+
+            do {
+                try process.run()
+                self.process = process
+
+                DispatchQueue.global(qos: .userInitiated).async {
+                    var output = ""
+                    let handle = pipe.fileHandleForReading
+                    let data = handle.readDataToEndOfFile()
+                    if let str = String(data: data, encoding: .utf8) {
+                        output = str
+                    }
+
+                    process.waitUntilExit()
+                    DispatchQueue.main.async {
+                        if process.terminationStatus == 0 {
+                            continuation.resume(returning: output.trimmingCharacters(in: .whitespacesAndNewlines))
+                        } else {
+                            continuation.resume(throwing: ClaudeError.runtimeError(output))
+                        }
+                    }
+                }
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
+    func cancel() {
+        process?.terminate()
+    }
+}
+
+enum ClaudeError: LocalizedError {
+    case runtimeError(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .runtimeError(let message):
+            return message
+        }
     }
 }
 
 // MARK: - Views
 
-struct MessageBubble: View {
-    let message: Message
+struct SettingsView: View {
+    @ObservedObject var hotKeyManager: HotKeyManager
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var selectedKey = HotKeySetting.default.key
+    @State private var optionModifier = true
+    @State private var commandModifier = false
+    @State private var controlModifier = false
+    @State private var shiftModifier = false
+
+    private let availableKeys = ["space", "return", "tab", "escape"]
 
     var body: some View {
-        HStack {
-            if message.role == .user {
-                Spacer()
-            }
+        VStack(spacing: 20) {
+            Text("设置")
+                .font(.title)
+                .fontWeight(.bold)
 
-            VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
-                Text(message.content)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(message.role == .user ? Color.blue : Color.gray.opacity(0.2))
-                    .foregroundColor(message.role == .user ? .white : .primary)
-                    .cornerRadius(12)
+            Divider()
 
-                Text(formatTime(message.timestamp))
-                    .font(.caption2)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("全局快捷键")
+                    .font(.headline)
+
+                HStack(spacing: 12) {
+                    Menu(selectedKey.uppercased()) {
+                        ForEach(availableKeys, id: \.self) { key in
+                            Button(key.uppercased()) {
+                                selectedKey = key
+                            }
+                        }
+                    }
+                    .frame(width: 100)
+
+                    Text("+")
+
+                    Toggle("Option", isOn: $optionModifier)
+                    Toggle("Command", isOn: $commandModifier)
+                    Toggle("Control", isOn: $controlModifier)
+                    Toggle("Shift", isOn: $shiftModifier)
+                }
+
+                Text("当前: \(preview)")
+                    .font(.caption)
                     .foregroundColor(.secondary)
             }
-            .frame(maxWidth: 400, alignment: message.role == .user ? .trailing : .leading)
+            .padding()
+            .background(Color(nsColor: .controlBackgroundColor))
+            .cornerRadius(8)
 
-            if message.role == .assistant {
-                Spacer()
+            Spacer()
+
+            HStack(spacing: 12) {
+                Button("取消") {
+                    dismiss()
+                }
+                .keyboardShortcut(.cancelAction)
+
+                Button("保存") {
+                    saveSetting()
+                }
+                .keyboardShortcut(.defaultAction)
             }
+        }
+        .padding(24)
+        .frame(width: 400, height: 300)
+        .onAppear {
+            loadCurrentSetting()
         }
     }
 
-    private func formatTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+    private var preview: String {
+        var mods: [String] = []
+        if optionModifier { mods.append("Option") }
+        if commandModifier { mods.append("Command") }
+        if controlModifier { mods.append("Control") }
+        if shiftModifier { mods.append("Shift") }
+        return (mods + [selectedKey.uppercased()]).joined(separator: "+")
+    }
+
+    private func loadCurrentSetting() {
+        selectedKey = hotKeyManager.setting.key
+        optionModifier = hotKeyManager.setting.modifiers.contains("option")
+        commandModifier = hotKeyManager.setting.modifiers.contains("command")
+        controlModifier = hotKeyManager.setting.modifiers.contains("control")
+        shiftModifier = hotKeyManager.setting.modifiers.contains("shift")
+    }
+
+    private func saveSetting() {
+        var modifiers: [String] = []
+        if optionModifier { modifiers.append("option") }
+        if commandModifier { modifiers.append("command") }
+        if controlModifier { modifiers.append("control") }
+        if shiftModifier { modifiers.append("shift") }
+
+        hotKeyManager.setting = HotKeySetting(key: selectedKey, modifiers: modifiers)
+        dismiss()
     }
 }
 
-struct ChatView: View {
-    @ObservedObject var viewModel: ClaudeCLI
-    var skill: Skill?
-    @State private var input = ""
+// MARK: - HeightPreferenceKey
+
+struct HeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 24
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct SimpleSkillRowView: View {
+    let skill: Skill
+    let index: Int
 
     var body: some View {
-        VStack(spacing: 0) {
-            if let skill = skill {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(skill.name).font(.headline)
-                        Text(skill.description).font(.caption).foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    if viewModel.isProcessing {
-                        ProgressView().scaleEffect(0.8)
-                    }
-                }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-            } else {
-                HStack {
-                    Text("选择一个技能开始对话").foregroundColor(.secondary)
-                    Spacer()
-                }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-            }
+        HStack(spacing: 8) {
+            Text("\(index)")
+                .font(.system(size: 11))
+                .monospaced()
+                .foregroundColor(.secondary)
+                .frame(width: 14, alignment: .trailing)
 
-            Divider()
+            Text(skill.name)
+                .font(.system(size: 12, weight: .medium))
 
-            ScrollViewReader { proxy in
-                ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(viewModel.messages) { message in
-                            MessageBubble(message: message).id(message.id)
-                        }
-                    }
-                    .padding()
-                }
-                .onChange(of: viewModel.messages.count) { _ in
-                    if let lastMessage = viewModel.messages.last {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                        }
-                    }
-                }
-            }
-
-            Divider()
-
-            HStack(spacing: 12) {
-                TextEditor(text: $input)
-                    .frame(minHeight: 60, maxHeight: 150)
-                    .textFieldStyle(.plain)
-                    .disabled(viewModel.isProcessing)
-                    .font(.system(.body, design: .monospaced))
-
-                VStack(spacing: 8) {
-                    Button(action: sendMessage) {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(input.isEmpty || viewModel.isProcessing ? .secondary : .blue)
-                    }
-                    .disabled(input.isEmpty || viewModel.isProcessing)
-
-                    Button(action: clearInput) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
-            .padding()
-            .background(Color(nsColor: .textBackgroundColor))
+            Spacer()
         }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
     }
+}
 
-    private func sendMessage() {
-        guard !input.isEmpty else { return }
-        viewModel.send(input, skill: skill)
-        input = ""
+struct SkillPickerView: View {
+    @ObservedObject var vm: AppViewModel
+
+    var body: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(vm.filteredSkills.enumerated()), id: \.element.id) { index, skill in
+                    SimpleSkillRowView(skill: skill, index: index + 1)
+                        .onTapGesture {
+                            vm.selectSkill(skill)
+                        }
+                }
+            }
+        }
+        .frame(maxHeight: 200)
+        .background(Color(nsColor: .windowBackgroundColor))
+        .cornerRadius(6)
+        .shadow(radius: 4)
     }
+}
 
-    private func clearInput() {
-        input = ""
+struct SkillRowView: View {
+    let skill: Skill
+    let index: Int
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.3))
+                    .frame(width: 24, height: 24)
+
+                Text("\(index % 10)")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(isSelected ? .white : .secondary)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(skill.displayName)
+                    .font(.system(size: 13, weight: .semibold))
+
+                Text(skill.description)
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+            }
+
+            Spacer()
+        }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 8)
+        .background(isSelected ? Color.accentColor.opacity(0.1) : Color.clear)
+        .cornerRadius(6)
     }
 }
 
 struct MainView: View {
     @StateObject var vm: AppViewModel
+    @FocusState private var isInputFocused: Bool
+    @State private var editorHeight: CGFloat = 24
 
     var body: some View {
-        NavigationSplitView {
+        ZStack(alignment: .topLeading) {
             VStack(spacing: 0) {
-                HStack {
-                    Text("Skills").font(.headline)
-                    Spacer()
-                    Text("\(vm.skills.count)").font(.caption).foregroundColor(.secondary)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(spacing: 12) {
+                            ForEach(vm.messages) { message in
+                                MessageView(message: message)
+                                    .id(message.id)
+                            }
+                        }
+                        .padding()
+                    }
+                    .onChange(of: vm.messages.count) { _, _ in
+                        if let lastMessage = vm.messages.last {
+                            withAnimation {
+                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                            }
+                        }
+                    }
                 }
-                .padding()
 
                 Divider()
 
-                List(vm.skills, selection: $vm.selectedSkill) { skill in
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(skill.name).font(.headline)
-                        Text(skill.description).font(.caption).foregroundColor(.secondary).lineLimit(2)
+                ZStack(alignment: .top) {
+                    HStack(spacing: 8) {
+                        ZStack(alignment: .topLeading) {
+                            // 隐藏的 Text 用于测量内容高度
+                            Text(vm.inputText.isEmpty ? " " : vm.inputText)
+                                .font(.body)
+                                .padding(4) // TextEditor 的内边距
+                                .background(GeometryReader { geometry in
+                                    Color.clear.preference(key: HeightPreferenceKey.self,
+                                                          value: geometry.size.height)
+                                })
+                                .opacity(0)
+
+                            TextEditor(text: $vm.inputText)
+                                .focused($isInputFocused)
+                                .frame(height: editorHeight)
+                                .font(.body)
+                                .scrollContentBackground(.hidden)
+                                .background(Color.clear)
+                                .onChange(of: vm.inputText) { oldValue, newValue in
+                                    if newValue.hasPrefix("/") && !oldValue.hasPrefix("/") {
+                                        vm.showSkillPicker = true
+                                    } else if !newValue.hasPrefix("/") && vm.showSkillPicker {
+                                        vm.showSkillPicker = false
+                                    }
+                                }
+                                .onKeyPress { keyPress in
+                                    if vm.handleKeyPress(keyPress.characters) {
+                                        return .handled
+                                    }
+                                    return .ignored
+                                }
+                                .overlay {
+                                    if vm.inputText.isEmpty {
+                                        Text("输入消息... (输入 / 查看技能)")
+                                            .foregroundColor(.secondary)
+                                            .font(.body)
+                                            .padding(.leading, 5)
+                                            .padding(.top, 8)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                }
+                        }
+                        .padding(4)
+
+                        if vm.isLoading {
+                            ProgressView()
+                                .controlSize(.small)
+                        } else {
+                            Button(action: vm.sendMessage) {
+                                Image(systemName: "arrow.up.circle.fill")
+                                    .font(.title2)
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(vm.inputText.isEmpty)
+                        }
                     }
-                    .padding(4)
-                    .tag(skill)
+                    .padding(8)
+                    .background(Color(nsColor: .textBackgroundColor))
+
+                    if vm.showSkillPicker && !vm.filteredSkills.isEmpty {
+                        SkillPickerView(vm: vm)
+                            .transition(.opacity)
+                    }
                 }
-                .listStyle(.sidebar)
             }
-            .frame(minWidth: 200, maxWidth: 300)
-        } detail: {
-            ChatView(viewModel: vm.claude, skill: vm.selectedSkill)
+            .frame(minWidth: 500, minHeight: 400)
+            .alert("错误", isPresented: Binding<Bool>(
+                get: { vm.errorMessage != nil },
+                set: { if !$0 { vm.errorMessage = nil } }
+            ), presenting: vm.errorMessage) { error in
+                Button("确定") { }
+            } message: { error in
+                Text(error)
+            }
         }
-        .frame(minWidth: 600, minHeight: 400)
+        .onPreferenceChange(HeightPreferenceKey.self) { contentHeight in
+            // 限制高度范围：最小 24px，最大 160px
+            editorHeight = min(max(contentHeight, 24), 160)
+        }
+        .onAppear {
+            isInputFocused = true
+        }
     }
 }
 
-struct DirectoryPickerView: View {
-    @State private var selectedDirectory: URL?
-    @State private var showPicker = false
-    let onDirectorySelected: (URL) -> Void
+struct MessageView: View {
+    let message: ChatMessage
 
     var body: some View {
-        VStack(spacing: 30) {
-            Image(systemName: "folder.badge.gearshape")
-                .font(.system(size: 60))
-                .foregroundColor(.blue)
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: message.role == "user" ? "person.circle" : "brain")
+                .font(.title3)
+                .foregroundColor(message.role == "user" ? .blue : .purple)
 
-            VStack(spacing: 8) {
-                Text("选择项目目录")
-                    .font(.title)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(message.role == "user" ? "你" : "Claude")
+                    .font(.caption)
                     .fontWeight(.semibold)
-
-                Text("Claude CLI 将在此目录下运行")
-                    .font(.body)
                     .foregroundColor(.secondary)
-            }
 
-            if let directory = selectedDirectory {
-                HStack {
-                    Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
-                    Text("已选择").foregroundColor(.secondary)
-                    Text(directory.path)
-                        .font(.system(.body, design: .monospaced))
-                        .padding()
-                        .background(Color(nsColor: .controlBackgroundColor))
-                        .cornerRadius(8)
-                }
+                Text(message.content)
+                    .textSelection(.enabled)
             }
-
-            Button(action: { showPicker = true }) {
-                HStack {
-                    Image(systemName: "folder")
-                    Text(selectedDirectory == nil ? "选择目录" : "更换目录")
-                }
-                .font(.body)
-                .foregroundColor(.white)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 12)
-                .background(selectedDirectory == nil ? Color.blue : Color.accentColor)
-                .cornerRadius(8)
-            }
-            .buttonStyle(.plain)
 
             Spacer()
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(Color(nsColor: .controlBackgroundColor))
+        .cornerRadius(8)
+    }
+}
 
-            if let directory = selectedDirectory {
-                Button(action: { onDirectorySelected(directory) }) {
-                    HStack {
-                        Text("开始使用").fontWeight(.semibold)
-                        Image(systemName: "arrow.right")
-                    }
-                    .font(.body)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
-                }
-                .buttonStyle(.plain)
-            }
+// MARK: - MenuBarManager
+
+class MenuBarManager: NSObject, ObservableObject {
+    private var statusItem: NSStatusItem?
+    private var popover: NSPopover?
+    private var settingsPopover: NSPopover?
+    private var hotKeyManager: HotKeyManager!
+    let workDirectory: URL
+
+    @Published var isPopoverShown = false
+
+    init(workDirectory: URL) {
+        self.workDirectory = workDirectory
+        super.init()
+        self.hotKeyManager = HotKeyManager { [weak self] in
+            self?.togglePopover()
         }
-        .padding(40)
-        .frame(width: 500, height: 400)
-        .fileImporter(
-            isPresented: $showPicker,
-            allowedContentTypes: [.folder],
-            allowsMultipleSelection: false
-        ) { result in
-            if case .success(let urls) = result, let url = urls.first {
-                _ = url.startAccessingSecurityScopedResource()
-                selectedDirectory = url
-            }
+        setupStatusItem()
+    }
+
+    private func setupStatusItem() {
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+
+        if let button = statusItem?.button {
+            button.image = NSImage(systemSymbolName: "brain", accessibilityDescription: "Oh My Skill")
         }
+
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "显示", action: #selector(showPopover), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "隐藏", action: #selector(hidePopover), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "设置...", action: #selector(showSettings), keyEquivalent: ","))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "退出", action: #selector(quit), keyEquivalent: "q"))
+
+        menu.items.forEach { $0.target = self }
+        statusItem?.menu = menu
+    }
+
+    @objc func togglePopover() {
+        if isPopoverShown {
+            hidePopover()
+        } else {
+            showPopover()
+        }
+    }
+
+    @objc func showPopover() {
+        guard let button = statusItem?.button else { return }
+
+        if popover == nil {
+            popover = NSPopover()
+            popover?.contentSize = NSSize(width: 600, height: 500)
+            popover?.behavior = .transient
+            let vm = AppViewModel(workDirectory: self.workDirectory)
+            popover?.contentViewController = NSHostingController(
+                rootView: MainView(vm: vm)
+            )
+        }
+
+        popover?.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+        isPopoverShown = true
+    }
+
+    @objc func hidePopover() {
+        popover?.performClose(nil)
+        isPopoverShown = false
+    }
+
+    @objc func showSettings() {
+        guard let button = statusItem?.button else { return }
+
+        if settingsPopover == nil {
+            settingsPopover = NSPopover()
+            settingsPopover?.contentSize = NSSize(width: 400, height: 300)
+            settingsPopover?.behavior = .transient
+            settingsPopover?.contentViewController = NSHostingController(
+                rootView: SettingsView(hotKeyManager: hotKeyManager)
+            )
+        }
+
+        settingsPopover?.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+    }
+
+    @objc func quit() {
+        NSApplication.shared.terminate(nil)
     }
 }
 
@@ -637,26 +848,41 @@ struct DirectoryPickerView: View {
 
 @main
 struct OhMySkillApp: App {
-    @State private var workDirectory: URL?
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        WindowGroup {
-            RootView(workDirectory: $workDirectory)
+        Settings {
+            EmptyView()
         }
     }
 }
 
-struct RootView: View {
-    @Binding var workDirectory: URL?
+class AppDelegate: NSObject, NSApplicationDelegate {
+    var menuBarManager: MenuBarManager?
 
-    var body: some View {
-        if let workDirectory = workDirectory {
-            MainView(vm: AppViewModel(workDirectory: workDirectory))
-        } else {
-            DirectoryPickerView { directory in
-                self.workDirectory = directory
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+        showDirectoryPicker()
+    }
+
+    func showDirectoryPicker() {
+        let alert = NSAlert()
+        alert.messageText = "选择项目目录"
+        alert.informativeText = "请选择 Claude CLI 将要运行的工作目录"
+        alert.addButton(withTitle: "选择")
+        alert.addButton(withTitle: "取消")
+
+        let response = alert.runModal()
+
+        if response == .alertFirstButtonReturn {
+            let panel = NSOpenPanel()
+            panel.canChooseFiles = false
+            panel.canChooseDirectories = true
+            panel.allowsMultipleSelection = false
+
+            if panel.runModal() == .OK, let url = panel.url {
+                menuBarManager = MenuBarManager(workDirectory: url)
             }
-            .frame(minWidth: 500, minHeight: 400)
         }
     }
 }

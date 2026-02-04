@@ -1,0 +1,496 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.HotKey-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/sources",
+      "importPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKey.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKeysController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/Key.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo+System.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/NSEventModifierFlags+HotKey.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "HotKey",
+      "moduleOutputPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules/HotKey.swiftmodule",
+      "objects" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/HotKey.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/HotKeysController.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/Key.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/KeyCombo+System.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/KeyCombo.swift.o",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/NSEventModifierFlags+HotKey.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/include/HotKey-Swift.h",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-suppress-warnings"
+      ],
+      "outputFileMapPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/HotKey.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/HotKeysController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/Key.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/KeyCombo+System.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/KeyCombo.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/NSEventModifierFlags+HotKey.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules/HotKey.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKey.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKeysController.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/Key.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo+System.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo.swift",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/NSEventModifierFlags+HotKey.swift"
+      ],
+      "tempsPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.OhMySkill-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/sources",
+      "importPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules/HotKey.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "OhMySkill",
+      "moduleOutputPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules/OhMySkill.swiftmodule",
+      "objects" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "OhMySkill_main",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "oh_my_skill"
+      ],
+      "outputFileMapPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules/OhMySkill.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift"
+      ],
+      "tempsPath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "HotKey" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "HotKey",
+      "-c",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKey.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKeysController.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/Key.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo+System.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo.swift",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/NSEventModifierFlags+HotKey.swift",
+      "-I",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/include/HotKey-Swift.h",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-suppress-warnings",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ],
+    "OhMySkill" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "OhMySkill",
+      "-package-name",
+      "oh_my_skill",
+      "-c",
+      "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift",
+      "-I",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "OhMySkill_main",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "oh_my_skill",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "HotKey" : [
+
+    ],
+    "OhMySkill" : [
+      "HotKey"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKey.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/HotKeysController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/Key.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo+System.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/KeyCombo.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/checkouts/HotKey/Sources/HotKey/NSEventModifierFlags+HotKey.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/sources"
+    },
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill-entitlement.plist"
+    },
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/src/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/sources"
+    },
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/HotKey.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/HotKeysController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/Key.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/KeyCombo+System.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/KeyCombo.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/HotKey.build/NSEventModifierFlags+HotKey.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/OhMySkill.product/Objects.LinkFileList"
+    },
+    "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/agiray/Desktop/github/oh-my-skill/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+    }
+  }
+}

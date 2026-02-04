@@ -552,16 +552,6 @@ struct SettingsView: View {
     }
 }
 
-// MARK: - HeightPreferenceKey
-
-struct HeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = 24
-
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
-
 struct SimpleSkillRowView: View {
     let skill: Skill
     let index: Int
@@ -665,7 +655,6 @@ struct SkillRowView: View {
 struct MainView: View {
     @StateObject var vm: AppViewModel
     @FocusState private var isInputFocused: Bool
-    @State private var editorHeight: CGFloat = 24
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -700,50 +689,29 @@ struct MainView: View {
 
                     // 文本输入区域在下方
                     HStack(spacing: 8) {
-                        ZStack(alignment: .topLeading) {
-                            // 隐藏的 Text 用于测量内容高度
-                            Text(vm.inputText.isEmpty ? " " : vm.inputText)
-                                .font(.body)
-                                .padding(4) // TextEditor 的内边距
-                                .background(GeometryReader { geometry in
-                                    Color.clear.preference(key: HeightPreferenceKey.self,
-                                                          value: geometry.size.height)
-                                })
-                                .opacity(0)
-
-                            TextEditor(text: $vm.inputText)
-                                .focused($isInputFocused)
-                                .frame(height: editorHeight)
-                                .font(.body)
-                                .scrollContentBackground(.hidden)
-                                .background(Color.clear)
-                                .onChange(of: vm.inputText) { oldValue, newValue in
-                                    if newValue.hasPrefix("/") && !oldValue.hasPrefix("/") {
-                                        vm.showSkillPicker = true
-                                        vm.selectedSkillIndex = nil
-                                    } else if !newValue.hasPrefix("/") && vm.showSkillPicker {
-                                        vm.showSkillPicker = false
-                                        vm.selectedSkillIndex = nil
-                                    }
+                        TextEditor(text: $vm.inputText)
+                            .focused($isInputFocused)
+                            .frame(height: 80)
+                            .font(.body)
+                            .scrollContentBackground(.hidden)
+                            .background(Color.clear)
+                            .border(Color.black, width: 1)
+                            .onChange(of: vm.inputText) { oldValue, newValue in
+                                if newValue.hasPrefix("/") && !oldValue.hasPrefix("/") {
+                                    vm.showSkillPicker = true
+                                    vm.selectedSkillIndex = nil
+                                } else if !newValue.hasPrefix("/") && vm.showSkillPicker {
+                                    vm.showSkillPicker = false
+                                    vm.selectedSkillIndex = nil
                                 }
-                                .onKeyPress { keyPress in
-                                    if vm.handleKeyPress(keyPress.characters) {
-                                        return .handled
-                                    }
-                                    return .ignored
+                            }
+                            .onKeyPress { keyPress in
+                                if vm.handleKeyPress(keyPress.characters) {
+                                    return .handled
                                 }
-                                .overlay {
-                                    if vm.inputText.isEmpty {
-                                        Text("输入消息... (输入 / 查看技能)")
-                                            .foregroundColor(.secondary)
-                                            .font(.body)
-                                            .padding(.leading, 5)
-                                            .padding(.top, 8)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                    }
-                                }
-                        }
-                        .padding(4)
+                                return .ignored
+                            }
+                            .padding(4)
 
                         if vm.isLoading {
                             ProgressView()
@@ -771,10 +739,6 @@ struct MainView: View {
             } message: { error in
                 Text(error)
             }
-        }
-        .onPreferenceChange(HeightPreferenceKey.self) { contentHeight in
-            // 限制高度范围：最小 24px，最大 160px
-            editorHeight = min(max(contentHeight, 24), 160)
         }
         .onAppear {
             isInputFocused = true

@@ -231,6 +231,7 @@ class AppViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var showSkillPicker = false
+    @Published var selectedSkillIndex: Int? = nil
     @Published var availableSkills: [Skill] = []
 
     private let claudeCLI: ClaudeCLI
@@ -265,6 +266,7 @@ class AppViewModel: ObservableObject {
     func selectSkill(_ skill: Skill) {
         inputText = "/\(skill.name) "
         showSkillPicker = false
+        selectedSkillIndex = nil
     }
 
     func handleKeyPress(_ key: String) -> Bool {
@@ -273,18 +275,46 @@ class AppViewModel: ObservableObject {
         switch key {
         case "escape":
             showSkillPicker = false
+            selectedSkillIndex = nil
             return true
+
+        case "up", "uparrow":
+            if let currentIndex = selectedSkillIndex {
+                selectedSkillIndex = max(0, currentIndex - 1)
+            } else {
+                selectedSkillIndex = 0
+            }
+            return true
+
+        case "down", "downarrow":
+            if let currentIndex = selectedSkillIndex {
+                selectedSkillIndex = min(filteredSkills.count - 1, currentIndex + 1)
+            } else {
+                selectedSkillIndex = 0
+            }
+            return true
+
+        case "return", "enter":
+            if let index = selectedSkillIndex, index < filteredSkills.count {
+                selectSkill(filteredSkills[index])
+                selectedSkillIndex = nil
+                return true
+            }
+            return false
+
         case "0":
             if filteredSkills.count >= 10 {
                 selectSkill(filteredSkills[9])
                 return true
             }
+
         case "1", "2", "3", "4", "5", "6", "7", "8", "9":
             let index = Int(key)! - 1
             if index < filteredSkills.count {
                 selectSkill(filteredSkills[index])
                 return true
             }
+
         default:
             break
         }
@@ -535,22 +565,29 @@ struct HeightPreferenceKey: PreferenceKey {
 struct SimpleSkillRowView: View {
     let skill: Skill
     let index: Int
+    let isSelected: Bool
 
     var body: some View {
         HStack(spacing: 8) {
-            Text("\(index)")
-                .font(.system(size: 11))
-                .monospaced()
-                .foregroundColor(.secondary)
-                .frame(width: 14, alignment: .trailing)
+            ZStack {
+                Circle()
+                    .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.3))
+                    .frame(width: 18, height: 18)
+
+                Text("\(index)")
+                    .font(.system(size: 10, weight: isSelected ? .bold : .regular))
+                    .foregroundColor(isSelected ? .white : .secondary)
+            }
 
             Text(skill.name)
-                .font(.system(size: 12, weight: .medium))
+                .font(.system(size: 12, weight: isSelected ? .semibold : .medium))
+                .foregroundColor(isSelected ? .primary : .secondary)
 
             Spacer()
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 4)
+        .padding(.vertical, 5)
+        .background(isSelected ? Color.accentColor.opacity(0.12) : Color.clear)
         .contentShape(Rectangle())
     }
 }
@@ -562,17 +599,30 @@ struct SkillPickerView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(vm.filteredSkills.enumerated()), id: \.element.id) { index, skill in
-                    SimpleSkillRowView(skill: skill, index: index + 1)
-                        .onTapGesture {
-                            vm.selectSkill(skill)
-                        }
+                    SimpleSkillRowView(
+                        skill: skill,
+                        index: index + 1,
+                        isSelected: vm.selectedSkillIndex == index
+                    )
+                    .onTapGesture {
+                        vm.selectSkill(skill)
+                    }
+                    .id("skill-\(index)")  // 用于滚动定位
                 }
             }
+            .scrollPosition(id: Binding(
+                get: { vm.selectedSkillIndex.map { "skill-\($0)" } },
+                set: { _ in }
+            ))
         }
-        .frame(maxHeight: 200)
+        .frame(height: min(150, CGFloat(vm.filteredSkills.count * 28)))  // 动态高度，最大 150px
         .background(Color(nsColor: .windowBackgroundColor))
         .cornerRadius(6)
         .shadow(radius: 4)
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+        )
     }
 }
 
@@ -641,7 +691,14 @@ struct MainView: View {
 
                 Divider()
 
-                ZStack(alignment: .top) {
+                VStack(spacing: 4) {
+                    // 技能列表在上方
+                    if vm.showSkillPicker && !vm.filteredSkills.isEmpty {
+                        SkillPickerView(vm: vm)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+
+                    // 文本输入区域在下方
                     HStack(spacing: 8) {
                         ZStack(alignment: .topLeading) {
                             // 隐藏的 Text 用于测量内容高度
@@ -663,8 +720,10 @@ struct MainView: View {
                                 .onChange(of: vm.inputText) { oldValue, newValue in
                                     if newValue.hasPrefix("/") && !oldValue.hasPrefix("/") {
                                         vm.showSkillPicker = true
+                                        vm.selectedSkillIndex = nil
                                     } else if !newValue.hasPrefix("/") && vm.showSkillPicker {
                                         vm.showSkillPicker = false
+                                        vm.selectedSkillIndex = nil
                                     }
                                 }
                                 .onKeyPress { keyPress in
@@ -700,12 +759,8 @@ struct MainView: View {
                     }
                     .padding(8)
                     .background(Color(nsColor: .textBackgroundColor))
-
-                    if vm.showSkillPicker && !vm.filteredSkills.isEmpty {
-                        SkillPickerView(vm: vm)
-                            .transition(.opacity)
-                    }
                 }
+                .animation(.spring(response: 0.3, dampingFraction: 0.8), value: vm.showSkillPicker)
             }
             .frame(minWidth: 500, minHeight: 400)
             .alert("错误", isPresented: Binding<Bool>(
